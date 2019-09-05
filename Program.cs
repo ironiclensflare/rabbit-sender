@@ -8,14 +8,27 @@ namespace rabbit_sender
     {
         static void Main(string[] args)
         {
+            int messagesToAdd = 1;
+
+            if (args.Length > 0 && args[0] != null)
+            {
+                _ = int.TryParse(args[0], out messagesToAdd);
+            }
+
             var factory = new ConnectionFactory { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
                     channel.QueueDeclare("samplequeue", true, false, false, null);
-                    channel.BasicPublish("", "samplequeue", false, null, CreateMessage("Hello"));
-                    Console.WriteLine("Added message to the queue.");
+
+                    for (var i = 0; i < messagesToAdd; i++)
+                    {
+                        var message = CreateMessage(Guid.NewGuid().ToString());
+                        channel.BasicPublish("", "samplequeue", false, null, message);
+                    }
+
+                    Console.WriteLine($"Added {messagesToAdd} message(s) to the queue.");
                 }
             }
         }
