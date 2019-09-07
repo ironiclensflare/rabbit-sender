@@ -1,11 +1,15 @@
 using System;
 using System.Text;
+using log4net;
+using rabbit_sender.log;
 using RabbitMQ.Client;
 
 namespace rabbit_sender
 {
     class Program
     {
+        private static readonly ILog _logger = Logger.GetLogger();
+
         static void Main(string[] args)
         {
             int messagesToAdd = 1;
@@ -18,17 +22,22 @@ namespace rabbit_sender
             var factory = new ConnectionFactory { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             {
+                _logger.Info("Connecting to RabbitMQ");
                 using (var channel = connection.CreateModel())
                 {
+                    _logger.Debug("Declaring queue");
                     channel.QueueDeclare("samplequeue", true, false, false, null);
 
+                    _logger.Info($"Found {messagesToAdd} message(s) to add");
                     for (var i = 0; i < messagesToAdd; i++)
                     {
-                        var message = CreateMessage(Guid.NewGuid().ToString());
+                        var guid = Guid.NewGuid().ToString();
+                        var message = CreateMessage(guid);
+                        _logger.Debug($"Added {guid} to the queue");
                         channel.BasicPublish("", "samplequeue", false, null, message);
                     }
 
-                    Console.WriteLine($"Added {messagesToAdd} message(s) to the queue.");
+                    _logger.Info($"Added {messagesToAdd} message(s) to the queue.");
                 }
             }
         }
