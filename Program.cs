@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using log4net;
-using rabbit_sender.log;
+using ironiclensflare.logger;
 using RabbitMQ.Client;
 
 namespace rabbit_sender
