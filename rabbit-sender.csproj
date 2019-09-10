@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>rabbit_sender</RootNamespace>
+    <ProjectGuid>{8e308aad-4d20-404d-99ea-663826a7d79e}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
