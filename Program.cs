@@ -4,7 +4,7 @@ using ironiclensflare.logger;
 
 namespace rabbit_sender
 {
-    class Program
+    public static class Program
     {
         private static readonly ILog _logger = Logger.GetLogger();
 
